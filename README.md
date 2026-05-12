@@ -72,3 +72,4 @@ export default defineConfig([
 ])
 ```
 # stock_service_prac
+# stock_service_prac
