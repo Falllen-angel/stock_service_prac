@@ -29,12 +29,12 @@ export default function CandleChart({ isDark }: Props) {
       layout: {
         background: {
           type: ColorType.Solid,
-          color: isDark ? '#000' : '#fff',
+          color: 'transparent',
         },
         textColor: isDark ? '#ddd' : '#000',
       },
       width: chartContainerRef.current.clientWidth,
-      height: 400,
+      height: chartContainerRef.current.clientHeight,
     })
 
     const candleStickSeries = chart.addSeries(CandlestickSeries, {
@@ -44,23 +44,48 @@ export default function CandleChart({ isDark }: Props) {
       wickUpColor: '#26a69a',
       wickDownColor: '#ef5350',
     })
+    const data: CandlestickData[] = [];
 
-    const data: CandlestickData[] = [
-      { time: '2018-12-22', open: 75.16, high: 82.84, low: 36.16, close: 45.72 },
-      { time: '2018-12-23', open: 45.12, high: 53.9, low: 45.12, close: 48.09 },
-      { time: '2018-12-24', open: 60.71, high: 60.71, low: 53.39, close: 59.29 },
-      { time: '2018-12-25', open: 68.26, high: 68.26, low: 59.04, close: 60.5 },
-      { time: '2018-12-26', open: 67.71, high: 105.85, low: 66.67, close: 91.04 },
-      { time: '2018-12-27', open: 91.04, high: 121.4, low: 82.7, close: 111.4 },
-      { time: '2018-12-28', open: 111.51, high: 142.83, low: 103.34, close: 131.25 },
-      { time: '2018-12-29', open: 131.33, high: 151.17, low: 77.68, close: 96.43 },
-      { time: '2018-12-30', open: 106.33, high: 110.2, low: 90.39, close: 98.1 },
-      { time: '2018-12-31', open: 109.87, high: 114.69, low: 85.66, close: 111.26 },
-    ]
+    let lastClose = 100;
+
+    const startDate = new Date('2012-09-01');
+
+    for (let i = 0; i < 5000; i++) {
+      const currentDate = new Date(startDate);
+
+      currentDate.setDate(startDate.getDate() + i);
+
+      const yyyy = currentDate.getFullYear();
+
+      const mm = String(currentDate.getMonth() + 1).padStart(2, '0');
+
+      const dd = String(currentDate.getDate()).padStart(2, '0');
+
+      const open = lastClose;
+
+      const change = (Math.random() - 0.5) * 20;
+
+      const close = open + change;
+
+      const high = Math.max(open, close) + Math.random() * 10;
+
+      const low = Math.min(open, close) - Math.random() * 10;
+
+      data.push({
+        time: `${yyyy}-${mm}-${dd}`,
+
+        open: Number(open.toFixed(2)),
+        high: Number(high.toFixed(2)),
+        low: Number(low.toFixed(2)),
+        close: Number(close.toFixed(2)),
+      });
+
+      lastClose = close;
+    }
 
     candleStickSeries.setData(data)
 
-    chart.timeScale().fitContent()
+    // chart.timeScale().fitContent()
 
     const handleResize = () => {
       if(!chartContainerRef.current) return;
@@ -73,7 +98,7 @@ export default function CandleChart({ isDark }: Props) {
     
     const timeout = setTimeout(() => {
       candleStickSeries.update({
-        time: '2019-01-01',
+        time: '2026-05-10',
         open: 85.66,
         high: 200.00,
         low: 85.66,
@@ -100,7 +125,7 @@ export default function CandleChart({ isDark }: Props) {
       layout: {
         background: {
           type: ColorType.Solid,
-          color: isDark ? '#000' : '#fff',
+          color: isDark ? '#0D0E20' : '#fff',
         },
         textColor: isDark ? '#ddd' : '#000',
       },
@@ -116,9 +141,15 @@ export default function CandleChart({ isDark }: Props) {
   }, [isDark])
 
   return (
-    <div
-      ref={chartContainerRef}
-      className='w-full flex justify-center items-center p-5 rounded-lg bg-emerald-400'
-    />
+    <div 
+      style={{
+        backgroundColor: isDark? '#0D0E20': '#F7F7FF'
+      }}
+      className='w-full h-2/3 p-3 rounded-4xl' >
+      <div
+        ref={chartContainerRef}
+        className='w-full h-full rounded-3xl overflow-hidden border border-[#27187E] shadow-xl'
+      />
+    </div>
   )
 }

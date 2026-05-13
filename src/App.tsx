@@ -9,25 +9,15 @@ import { useState } from "react"
 
 import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
-import useWindowDimensions from "./components/UseWindowDimensions";
 
 import Nav from "./components/Nav";
 
 export default function App(){
   const [isDark, setIsDark] = useState<boolean>(false);
-  const {width, height} = useWindowDimensions()
   
   return (
     <>
-      <div style={{
-          width: `${width}px`,
-          height: `${height}px`,
-        }}
-        className={
-          isDark
-            ? 'bg-[#02050E]'
-            : 'bg-white'
-        }>
+      <div className={`w-screen h-screen ${isDark? 'bg-[#0D0E20]': 'bg-white'}`}>
         <Nav isDark={isDark} setIsDark={setIsDark} />
         <Routes>
           <Route path='/' element={<Home isDark={isDark} />} />
