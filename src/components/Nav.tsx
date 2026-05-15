@@ -1,36 +1,47 @@
+import {useNavigate } from "react-router-dom"
+import axios from "axios";
 import NavBtn from "./NavBtn";
+import SearchBar from "./SearchBar";
 
-// import { MdOutlineLightMode } from "react-icons/md";
-// import { MdDarkMode } from "react-icons/md";
 
-type Props = {
-  isDark: boolean,
-  setIsDark: React.Dispatch<React.SetStateAction<boolean>>;
-}
+export default function Nav(){
+  const navigate = useNavigate();
 
-export default function Nav({ isDark, setIsDark }: Props){
-  const clickIsDarkHandler = () => {
-    setIsDark(!isDark);
-  };
+  const handleSearch = async (q: string) => {
+    try {
+      const response = await axios(
+        `$https://localhost:5173/search/1?q=${q}`
+      )
+      console.log(response.data);
+      navigate(`/search/1?q=${encodeURIComponent(q)}`)
+    } catch(error){
+      console.log(error)
+    }
+  }
+  
   return (
-    <nav className="w-full h-12 flex justify-between items-center bg-[#27187E] p-3 px-8 rounded-b-xs">
-      <ul className="w-fit h-fit flex flex-wrap">
+    <nav className="
+      h-12 
+      p-3 
+      px-12
+      flex 
+      justify-between 
+      items-center 
+      rounded-4xl 
+      bg-white/10
+      backdrop-blur-xl 
+      shadow-2xl
+    ">
+      <ul className="w-1/3 h-fit flex flex-wrap justify-start items-center">
         <li className="w-fit h-fit">
           <NavBtn link="/" color="none" >
             <img src="/Rectangle.svg" alt="logo" />
           </NavBtn>
         </li>
       </ul>
-      <ul className="w-fit h-fit flex flex-wrap justify-between">
-        {/* <li className="w-fit h-fit">
-          <button 
-            className={`w-fit rounded-full  cursor-pointer 
-            ${isDark?"bg-yellow-50 text-black":"bg-black text-white"}`} 
-            onClick={clickIsDarkHandler}>
-              {isDark?<MdOutlineLightMode size={24}/>:<MdDarkMode size={20}/>}
-          </button>
-        </li> */}
-        <li className="w-fit h-fit"><NavBtn link="/SignIn" color="#F7F7FF" ><span>Sign In</span></NavBtn></li>
+      <SearchBar handleSearch={handleSearch}/>
+      <ul className="w-1/3 h-fit flex flex-wrap justify-end items-center">
+        <li className="w-fit h-fit"><NavBtn link="/SignIn" color="#bbef1f" ><span>Sign In</span></NavBtn></li>
       </ul>
     </nav>
   )

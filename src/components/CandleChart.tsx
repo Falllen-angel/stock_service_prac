@@ -11,16 +11,13 @@ import type {
   CandlestickData,
 } from 'lightweight-charts'
 
-type Props = {
-  isDark: boolean
-}
 
-export default function CandleChart({ isDark }: Props) {
+export default function CandleChart() {
   const chartContainerRef = useRef<HTMLDivElement>(null)
 
   const chartRef = useRef<IChartApi | null>(null)
   const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null)
-
+// '#27187E'
   // 1. 차트 최초 생성 (딱 1번)
   useEffect(() => {
     if (!chartContainerRef.current) return
@@ -31,7 +28,15 @@ export default function CandleChart({ isDark }: Props) {
           type: ColorType.Solid,
           color: 'transparent',
         },
-        textColor: isDark ? '#ddd' : '#000',
+        textColor: '#ddd',
+      },
+      grid: {
+        vertLines: {
+          color: 'rgba(255,255,255,0.03)',
+        },
+        horzLines: {
+          color: 'rgba(255,255,255,0.03)',
+        },
       },
       width: chartContainerRef.current.clientWidth,
       height: chartContainerRef.current.clientHeight,
@@ -118,37 +123,16 @@ export default function CandleChart({ isDark }: Props) {
   }, [])
 
   // 2. 다크모드 변경 (차트 재생성 X)
-  useEffect(() => {
-    if (!chartRef.current) return
-
-    chartRef.current.applyOptions({
-      layout: {
-        background: {
-          type: ColorType.Solid,
-          color: isDark ? '#0D0E20' : '#fff',
-        },
-        textColor: isDark ? '#ddd' : '#000',
-      },
-      grid: {
-        vertLines: {
-          color: isDark ? '#444' : '#e1e1e1',
-        },
-        horzLines: {
-          color: isDark ? '#444' : '#e1e1e1',
-        },
-      },
-    })
-  }, [isDark])
 
   return (
     <div 
       style={{
-        backgroundColor: isDark? '#0D0E20': '#F7F7FF'
+        // backgroundColor: '#F7F7FF'
       }}
-      className='w-full h-2/3 p-3 rounded-4xl' >
+      className='w-full h-2/3 p-3 rounded-4xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden'>
       <div
         ref={chartContainerRef}
-        className='w-full h-full rounded-3xl overflow-hidden border border-[#27187E] shadow-xl'
+        className='w-full h-full rounded-3xl overflow-hidden border border-[#27187E] shadow-xl cursor-crosshair'
       />
     </div>
   )
